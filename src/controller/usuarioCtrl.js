@@ -35,7 +35,11 @@ async function deletaUsuario(req, res) {
 }
 
 async function alteraUsuario(req, res) {
-    const data = await user.alterarUsuarioDB();
+    const {user_id, user_nome, user_email, user_senha} = req.body;
+
+    const senhaCodficada = await encodePassword(user_senha);
+
+    const data = await user.alterarUsuarioDB(user_id, user_nome, user_email, senhaCodficada);
 
     if(!data.error) {
         sendResponse(res, 200, data);
