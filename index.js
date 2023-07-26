@@ -1,6 +1,6 @@
 const express = require("express");
 const cors    = require("cors");
-// const routes  = require('./src/routes/routes');
+const userRoutes  = require('./src/routes/usuarioRoutes');
 const app     = express();
 const PORT    = 3002;
 require('dotenv').config();
@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     return res.status(200).send({ message: 'Server is running' });
 });
 
-// app.use('/', routes);
+app.use('/', userRoutes);
 
 app.use((req, res, next) => {
     const erro = new Error('route not found');

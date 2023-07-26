@@ -54,8 +54,10 @@ async function buscarUsuarios(req, res) {
     }
 }
 
-async function buscarUsuariosByID(req, res) {
-    const data = await user.buscarUsuariosByIDDB();
+async function buscarUsuariosByIDNome(req, res) {
+    const {user_nome} = req.body;
+    // const nome = req.body.user_nome;
+    const data = await user.buscarUsuariosByIDNomeDB(user_nome);
 
     if(!data.error) {
         sendResponse(res, 200, data);
@@ -78,5 +80,5 @@ module.exports = {
     deletaUsuario,
     alteraUsuario,
     buscarUsuarios,
-    buscarUsuariosByID
+    buscarUsuariosByIDNome
 }

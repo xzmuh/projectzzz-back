@@ -3,9 +3,9 @@ const db = new DataBase;
 
 class Usuario {
 
-    async insereUsuario(nome, email, senha) {
+    async insereUsuarioDB(nome, email, senha) {
         try {
-            const sql = `INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?);`;
+            const sql = `INSERT INTO usuarios (user_nome, user_email, user_senha) VALUES (?, ?, ?);`;
             const values = [nome, email, senha];
             const data = await db.pool.query(sql, values);
             console.log('Usuário inserido com sucesso!');
@@ -15,7 +15,7 @@ class Usuario {
         }
     }
     
-    async deleteUsuario(id) {
+    async deleteUsuarioDB(id) {
         try {
             const sql = `DELETE FROM usuarios WHERE id = ?;`;
             const values = [id];
@@ -26,8 +26,21 @@ class Usuario {
             return { erro: error, msg: `Erro ao deletar usuário do banco.` };
         }
     }
+    
+        async alterarUsuarioDB(id, nome, email, senha) {
+            try {
+                const sql = `UPDATE usuarios SET user_nome = ?, user_email = ?, user_senha = ? WHERE user_id = ?;`;
+                const values = [nome, email, senha, id];
+                const data = await db.pool.query(sql, values);
+                console.log('Usuário alterado com sucesso!');
+                return data; // Se necessário, você pode retornar os dados afetados ou outra informação relevante
+            } catch (error) {
+                console.error('Erro ao alterar usuário no banco:', error);
+                return { erro: error, msg: `Erro ao alterar usuário no banco.` };
+            }
+        }
 
-    async buscarUsuarios() {
+    async buscarUsuariosDB() {
         try {
             const sql = `SELECT * FROM usuarios;`;
             const data = await db.pool.query(sql);
@@ -39,17 +52,17 @@ class Usuario {
         }
     }
 
-    async alterarUsuario(id, nome, email, senha) {
+    async buscarUsuariosByIDNomeDB(nome) {
         try {
-            const sql = `UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?;`;
-            const values = [nome, email, senha, id];
-            const data = await db.pool.query(sql, values);
-            console.log('Usuário alterado com sucesso!');
-            return data; // Se necessário, você pode retornar os dados afetados ou outra informação relevante
+            const sql = `SELECT * FROM usuarios WHERE user_nome = ?;`;
+            const data = await db.pool.query(sql, nome);
+            console.log(`O usuário ${nome} está cadastrado`, data);
+            return data[0]; // Se necessário, você pode retornar os dados encontrados ou outra informação relevante
         } catch (error) {
-            console.error('Erro ao alterar usuário no banco:', error);
-            return { erro: error, msg: `Erro ao alterar usuário no banco.` };
+            console.error('Erro ao buscar usuários no banco:', error);
+            return { erro: error, msg: `Erro ao buscar usuários no banco.` };
         }
     }
-
 }
+
+module.exports = Usuario;
