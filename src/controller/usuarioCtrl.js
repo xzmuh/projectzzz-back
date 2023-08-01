@@ -10,11 +10,12 @@ function sendResponse(res, statusCode, dados) {
 }
 
 async function insereUsuario(req, res) {
-    const {user_nome, user_email, user_senha} = req.body;
-
-    const senhaCodficada = await encodePassword(user_senha);
+    const {user_nome, user_email, user_senha, user_incdate} = req.body;
     
-    const data = await user.insereUsuarioDB(user_nome, user_email, senhaCodficada);
+    const senhaCodficada = await encodePassword(user_senha);
+    console.log(req.body)
+    
+    const data = await user.insereUsuarioDB(user_nome, user_email, senhaCodficada, user_incdate);
     console.log("Insere", data);
     if(!data.error) {
         sendResponse(res, 200, data);
