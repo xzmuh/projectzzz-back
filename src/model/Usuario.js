@@ -3,10 +3,10 @@ const db = new DataBase;
 
 class Usuario {
 
-    async insereUsuarioDB(nome, email, senha) {
+    async insereUsuarioDB(nome, email, senha, incdate) {
         try {
-            const sql = `INSERT INTO usuarios (user_nome, user_email, user_senha) VALUES (?, ?, ?);`;
-            const values = [nome, email, senha];
+            const sql = `INSERT INTO usuarios (user_nome, user_email, user_senha, user_incdate) VALUES (?, ?, ?, ?);`;
+            const values = [nome, email, senha, incdate];
             const data = await db.pool.query(sql, values);
             console.log('Usuário inserido com sucesso!');
             return data; // Se necessário, você pode retornar os dados inseridos ou outra informação relevante
