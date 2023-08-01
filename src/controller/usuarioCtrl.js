@@ -10,17 +10,23 @@ function sendResponse(res, statusCode, dados) {
 }
 
 async function insereUsuario(req, res) {
-    const {user_nome, user_email, user_senha, user_incdate} = req.body;
+    const {user_nome, user_email, user_senha} = req.body;
+
+    const emailExistente = await user.buscarUsuariosByEmailDB(user_email);
     
-    const senhaCodficada = await encodePassword(user_senha);
-    console.log(req.body)
-    
-    const data = await user.insereUsuarioDB(user_nome, user_email, senhaCodficada, user_incdate);
-    console.log("Insere", data);
-    if(!data.error) {
-        sendResponse(res, 200, data);
+    if (!emailExistente.length) {
+        const senhaCodficada = await encodePassword(user_senha);
+        
+        const data = await user.insereUsuarioDB(user_nome, user_email, senhaCodficada);
+        console.log("Insere", data);
+        if(!data.error) {
+            sendResponse(res, 200, data);
+        } else {
+            sendResponse(res, 500, data);
+        }
     } else {
-        sendResponse(res, 500, data);
+        let messageError = {alert: "E-mail já cadastrado!"};
+        sendResponse(res, 200, messageError)
     }
 }
 
@@ -71,6 +77,18 @@ async function buscarUsuariosByIDNome(req, res) {
     }
 }
 
+async function buscarUsuariosByEmail(req, res) {
+    const {user_email} = req.body;
+    // const email = req.body.user_email;
+    const data = await user.buscarUsuariosByEmailDB(user_email);
+
+    if(!data.error) {
+        sendResponse(res, 200, data);
+    } else {
+        sendResponse(res, 500, data);
+    }
+}
+
 async function encodePassword(senha) {
     try {
         const hash = await bcrypt.hash(senha, 10);
@@ -85,5 +103,6 @@ module.exports = {
     deletaUsuario,
     alteraUsuario,
     buscarUsuarios,
-    buscarUsuariosByIDNome
+    buscarUsuariosByIDNome,
+    buscarUsuariosByEmail
 }
