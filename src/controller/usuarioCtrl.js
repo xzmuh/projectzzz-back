@@ -25,7 +25,7 @@ async function insereUsuario(req, res) {
             sendResponse(res, 500, data);
         }
     } else {
-        let messageError = {alert: "E-mail já cadastrado!"};
+        let messageError = {alert: "Este e-mail já está cadastrado, tente outro!"};
         sendResponse(res, 200, messageError)
     }
 }
@@ -98,10 +98,27 @@ async function encodePassword(senha) {
     }
 }
 
+async function alteraSenhaUsuario(req, res) {
+    const {user_id, nova_senha} = req.body;
+    
+    const novaSenhaCodficada = await encodePassword(nova_senha);
+    if (novaSenhaCodficada) {
+        const novaSenha = await user.alteraSenhaDB(user_id, novaSenhaCodficada);
+        if (novaSenha) {
+            const response = {success: true, msg: `Senha alterada com sucesso!`}
+            sendResponse(res, 200, response);
+            
+        } else {
+            sendResponse(res, 500, data);
+        }
+    }    
+}
+
 module.exports = {
     insereUsuario,
     deletaUsuario,
     alteraUsuario,
+    alteraSenhaUsuario,
     buscarUsuarios,
     buscarUsuariosByIDNome,
     buscarUsuariosByEmail

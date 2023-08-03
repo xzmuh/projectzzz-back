@@ -9,5 +9,6 @@ userRoute.post('/usuario-by-email', userCtrl.buscarUsuariosByEmail);
 userRoute.get('/buscar-todos', userCtrl.buscarUsuarios);
 userRoute.delete('/deleta-usuario/:userId', userCtrl.deletaUsuario);
 userRoute.put('/altera-usuario', userCtrl.alteraUsuario);
+userRoute.put('/altera-senha', userCtrl.alteraSenhaUsuario);
 
 module.exports = userRoute;

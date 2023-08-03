@@ -28,18 +28,18 @@ class Usuario {
         }
     }
     
-        async alterarUsuarioDB(id, nome, email, senha) {
-            try {
-                const sql = `UPDATE usuarios SET user_nome = ?, user_email = ?, user_senha = ? WHERE user_id = ?;`;
-                const values = [nome, email, senha, id];
-                const data = await db.pool.query(sql, values);
-                console.log('Usuário alterado com sucesso!');
-                return data; // Se necessário, você pode retornar os dados afetados ou outra informação relevante
-            } catch (error) {
-                console.error('Erro ao alterar usuário no banco:', error);
-                return { erro: error, msg: `Erro ao alterar usuário no banco.` };
-            }
+    async alterarUsuarioDB(id, nome, email, senha) {
+        try {
+            const sql = `UPDATE usuarios SET user_nome = ?, user_email = ?, user_senha = ? WHERE user_id = ?;`;
+            const values = [nome, email, senha, id];
+            const data = await db.pool.query(sql, values);
+            console.log('Usuário alterado com sucesso!');
+            return data; // Se necessário, você pode retornar os dados afetados ou outra informação relevante
+        } catch (error) {
+            console.error('Erro ao alterar usuário no banco:', error);
+            return { erro: error, msg: `Erro ao alterar usuário no banco.` };
         }
+    }
 
     async buscarUsuariosDB() {
         try {
@@ -74,6 +74,18 @@ class Usuario {
         } catch (error) {
             console.error('Erro ao buscar usuários no banco:', error);
             return { erro: error, msg: `Erro ao buscar usuários no banco.` };
+        }
+    }
+
+    async alteraSenhaDB(id, senha) {
+        try {
+            const sql = `UPDATE usuarios SET user_senha = ? WHERE user_id = ?;`;
+            const values = [senha, id]
+            const data = await db.pool.query(sql, values);
+            return true; // Se necessário, você pode retornar os dados encontrados ou outra informação relevante
+        } catch (error) {
+            console.error('Erro ao salvar nova senha no banco:', error);
+            return { erro: error, msg: `Erro ao salvar nova senha no banco.` };
         }
     }
 }
