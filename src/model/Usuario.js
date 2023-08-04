@@ -67,13 +67,12 @@ class Usuario {
 
     async buscarUsuariosByEmailDB(email) {
         try {
-            const sql = `SELECT user_nome,user_email FROM usuarios WHERE user_email = ?;`;
+            const sql = `SELECT user_id,user_nome,user_email FROM usuarios WHERE user_email = ?;`;
             const data = await db.pool.query(sql, email);
-            console.log(`O e-mail ${email} foi encontrado`, data);
             return data[0]; // Se necessário, você pode retornar os dados encontrados ou outra informação relevante
         } catch (error) {
-            console.error('Erro ao buscar usuários no banco:', error);
-            return { erro: error, msg: `Erro ao buscar usuários no banco.` };
+            console.error('Erro ao buscar o e-mail no banco:', error);
+            return { erro: error, msg: `Erro ao buscar o e-mail no banco.` };
         }
     }
 }
