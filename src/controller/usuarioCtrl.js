@@ -82,10 +82,12 @@ async function buscarUsuariosByEmail(req, res) {
     // const email = req.body.user_email;
     const data = await user.buscarUsuariosByEmailDB(user_email);
 
-    if(!data.error) {
-        sendResponse(res, 200, data);
-    } else {
+    if(data.error) {
         sendResponse(res, 500, data);
+    } else if (data.length) {
+        sendResponse(res, 200, {msg: `E-mail encontrado!`});
+    } else if (!data.length) {
+        sendResponse(res, 200, {msg: `E-mail não encontrado!`});
     }
 }
 
